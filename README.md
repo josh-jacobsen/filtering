@@ -1,5 +1,7 @@
 # Thematic Frontend Task
 
+
+
 This project is based off the Auth0 project created for a new project. Details on Auth0 are at the end of this file.
 
 This sample demonstrates:
