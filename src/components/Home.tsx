@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import Hero from "./Hero";
 import authConfig from "../auth_config.json";
 import { Auth0ContextInterface, withAuth0 } from '@auth0/auth0-react';
-import { Alert, Container, Row, Col, Button } from "reactstrap";
+import { Alert, Container, Row, Col, Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "reactstrap";
 
 async function GetFlightData<T>(request: RequestInfo, auth0: Auth0ContextInterface): Promise<T> {
   const getAccessTokenSilently = await auth0.getAccessTokenSilently();
@@ -22,8 +22,6 @@ async function GetFlightData<T>(request: RequestInfo, auth0: Auth0ContextInterfa
 var createUniqieId = function () {
   return '_' + Math.random().toString(36).substr(2, 9);
 };
-
-
 
 interface HomeProps {
   auth0: Auth0ContextInterface;
@@ -54,13 +52,18 @@ interface HomeState {
   error: string,
   loading: boolean,
   activeFilters: ColumnData[],
-  inactiveFilters: ColumnData[]
+  inactiveFilters: ColumnData[],
+  dropdownOpen: boolean
 }
 
 class Home extends React.Component<HomeProps, HomeState>
 {
   constructor(props: HomeProps) {
     super(props);
+
+    this.toggleDropdown = this.toggleDropdown.bind(this);
+
+
   }
 
   public readonly state: Readonly<HomeState> = {
@@ -68,7 +71,12 @@ class Home extends React.Component<HomeProps, HomeState>
     error: '',
     loading: true,
     activeFilters: new Array<ColumnData>(),
-    inactiveFilters: new Array<ColumnData>()
+    inactiveFilters: new Array<ColumnData>(),
+    dropdownOpen: false
+  }
+
+  toggleDropdown() {
+    this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
   }
 
   componentDidMount() {
@@ -175,45 +183,23 @@ class Home extends React.Component<HomeProps, HomeState>
             </Row>
           )}
 
-          <Row>Inactive Filters</Row>
-          {inactiveFilters.map(element => 
-            <Row key={element.id}> 
-              <Col>{element.sampleHeader}</Col>
-              <Col>{element.colType}</Col>
-              <Col>
-                <Button onClick={() => this.addFilter(element.id)}>
-                  Add
-                </Button>
-              </Col>
-            </Row>
-          )}
-          
+          <Dropdown
+            className="d-inline-block"
+            isOpen={this.state.dropdownOpen}
+            toggle={this.toggleDropdown}
+          >
+          <DropdownToggle caret>Add filter</DropdownToggle>
+            <DropdownMenu>
+              {
+                inactiveFilters.map(filter => 
+                  <DropdownItem key={filter.id} onClick={() => this.addFilter(filter.id)}>{filter.sampleHeader}</DropdownItem>
+                )
+              }
+          </DropdownMenu>
+        </Dropdown>
           </Container>
         }
-        {/* {(!loading && !error) &&
-          <Container>
-            
-          {aaaaa.data.columns.map(a =>
-          <Row key={a.id}>
-            <Col>
-                Column Type:{a.colType}
-            </Col>
-            <Col>
-              Number of Rows: {a.numRows}
-            </Col>
-            <Col>
-              Number of unique values: {a.numUniqueValues}
-            </Col>
-            <Col>
-              Sample Header: {a.sampleHeader}
-            </Col>
-            <Col>
-              Sample: {a.sample}
-              </Col>
-            </Row>
-          )}
-          </Container>
-        } */}
+
       </Fragment>
     );
   }
