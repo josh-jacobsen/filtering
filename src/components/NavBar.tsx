@@ -50,6 +50,11 @@ class NavBar extends Component<NavBarProps, NavBarState> {
     const { isOpen } = this.state;
     const { user, isAuthenticated, loginWithRedirect } = this.props.auth0;
 
+    if (!isAuthenticated) {
+      loginWithRedirect()
+
+    }
+
     return (
       <div className="nav-container">
         <Navbar color="light" light expand="md">
