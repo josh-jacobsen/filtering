@@ -3,8 +3,8 @@ import Hero from "./Hero";
 import AddFilter from "./AddFilter";
 import authConfig from "../auth_config.json";
 import { Auth0ContextInterface, withAuth0 } from '@auth0/auth0-react';
-import { Alert, Container, Row, Col, Button, Dropdown, DropdownItem, DropdownToggle } from "reactstrap";
-import { DropdownSubmenu, NavDropdownMenu } from "react-bootstrap-submenu";
+import { Alert, Container, Row, Col, Button } from "reactstrap";
+import Loading from './Loading';
 
 async function GetFlightData<T>(request: RequestInfo, auth0: Auth0ContextInterface): Promise<T> {
   const getAccessTokenSilently = await auth0.getAccessTokenSilently();
@@ -29,7 +29,7 @@ interface HomeProps {
   auth0: Auth0ContextInterface;
 }
 
-interface ColumnData {
+export interface ColumnData {
   id: string,
   colType: String,
   numRows: Number,
@@ -38,7 +38,7 @@ interface ColumnData {
   sampleHeader: String
 }
 
-interface AggregateData {
+export interface AggregateData {
   columns: ColumnData[],
   numColumns: Number,
   numRows: Number,
@@ -197,8 +197,8 @@ class Home extends React.Component<HomeProps, HomeState>
             </Row>
           )}
 
-          <AddFilter></AddFilter>
-
+          <AddFilter columns={inactiveFilters} loading={loading}></AddFilter>
+l
           {/* <Dropdown
             className="d-inline-block"
             isOpen={this.state.dropdownOpen}
