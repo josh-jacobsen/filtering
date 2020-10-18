@@ -1,8 +1,10 @@
 import React, { Fragment } from "react";
 import Hero from "./Hero";
+import AddFilter from "./AddFilter";
 import authConfig from "../auth_config.json";
 import { Auth0ContextInterface, withAuth0 } from '@auth0/auth0-react';
-import { Alert, Container, Row, Col, Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "reactstrap";
+import { Alert, Container, Row, Col, Button, Dropdown, DropdownItem, DropdownToggle } from "reactstrap";
+import { DropdownSubmenu, NavDropdownMenu } from "react-bootstrap-submenu";
 
 async function GetFlightData<T>(request: RequestInfo, auth0: Auth0ContextInterface): Promise<T> {
   const getAccessTokenSilently = await auth0.getAccessTokenSilently();
@@ -53,7 +55,8 @@ interface HomeState {
   loading: boolean,
   activeFilters: ColumnData[],
   inactiveFilters: ColumnData[],
-  dropdownOpen: boolean
+  dropdownOpen: boolean,
+  showFilterOptions: boolean
 }
 
 class Home extends React.Component<HomeProps, HomeState>
@@ -62,6 +65,8 @@ class Home extends React.Component<HomeProps, HomeState>
     super(props);
 
     this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
 
 
   }
@@ -72,11 +77,20 @@ class Home extends React.Component<HomeProps, HomeState>
     loading: true,
     activeFilters: new Array<ColumnData>(),
     inactiveFilters: new Array<ColumnData>(),
-    dropdownOpen: false
+    dropdownOpen: false,
+    showFilterOptions: false
   }
 
   toggleDropdown() {
     this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
+  }
+
+  onMouseEnter() {
+    this.setState({ showFilterOptions: true });
+  }
+
+  onMouseLeave() {
+    this.setState({ showFilterOptions: false });
   }
 
   componentDidMount() {
@@ -183,7 +197,9 @@ class Home extends React.Component<HomeProps, HomeState>
             </Row>
           )}
 
-          <Dropdown
+          <AddFilter></AddFilter>
+
+          {/* <Dropdown
             className="d-inline-block"
             isOpen={this.state.dropdownOpen}
             toggle={this.toggleDropdown}
@@ -196,7 +212,7 @@ class Home extends React.Component<HomeProps, HomeState>
                 )
               }
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
           </Container>
         }
 
