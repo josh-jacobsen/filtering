@@ -1,4 +1,4 @@
-
+# Project summary 
 
 ## Requirements and Delivery
 
@@ -13,6 +13,12 @@
 | It should be possible to rearrange the filters to show up in a specific order | Incomplete | Ran out of time to complete this requirement |
 | Upon saving the filters, the list of filters should be displayed in an alert box showing the name and the type of each filter added in the chosen order | Incomplete | Ran out of time to complete this requirement |
 
+
+## Additional functionality 
+
+| Functionality | Comments |
+| --------------- | --------------- |
+| Testing | No tests have been implemented for the new components/functionality. Would aim to add tests using Jest/React Testing Library | 
 
 
 
