@@ -1,5 +1,28 @@
 # Thematic Frontend Task
 
+### Requirements 
+
+| Requirement | Complete | Comments |
+| --------------- | --------------- | --------------- |
+| Clicking on `Add filter` should show the list of columns in a dataset | Complete | |
+| Hovering on one of the columns should show the sample data for that particular column | Incomplete | I ran into limitations of not being able to make nested dropdowns with Reactstrap. I began implemeting a solution to this (in the AddFilter.tsx component) howver ran out of time to complete it so stuck with Reactstrap so as to be able to delivery a product |
+| Clicking on a column should add that column as a `Default` filter with name defaulted to the sample header for that column | Complete |  |
+| It should also be possible to change the type of the filter to other types | Partially complete | There is a bug where changing the value of 1 of the dropdowns will change the value of all of them, and I ran out of time to complete this requrement fully |
+| Each filter must have a name | Complete | |
+| Clicking on delete should remove the filter from the list | Complete | |
+| It should be possible to rearrange the filters to show up in a specific order | Incomplete | Ran out of time to complete this requirement |
+| Upon saving the filters, the list of filters should be displayed in an alert box showing the name and the type of each filter added in the chosen order | Incomplete | Ran out of time to complete this requirement |
+
+
+
+
+
+
+
+
+
+
+
 ![](https://github.com/josh-jacobsen/filtering/blob/josh/load-data/add_filters.png)
 
 
