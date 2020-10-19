@@ -1,14 +1,11 @@
 import React, { Fragment } from "react";
 import Hero from "./Hero";
-import AddFilter from "./AddFilter";
 import authConfig from "../auth_config.json";
 import { Auth0ContextInterface, withAuth0 } from '@auth0/auth0-react';
-import { Alert, Container, Row, Col, Button } from "reactstrap";
-import Loading from './Loading';
+import { Alert, Container, Row, Col, Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from "reactstrap";
 
 async function GetFlightData<T>(request: RequestInfo, auth0: Auth0ContextInterface): Promise<T> {
   const getAccessTokenSilently = await auth0.getAccessTokenSilently();
-
   const response = await fetch(request, {
     method: 'GET',
     headers: {
@@ -56,7 +53,10 @@ interface HomeState {
   activeFilters: ColumnData[],
   inactiveFilters: ColumnData[],
   dropdownOpen: boolean,
-  showFilterOptions: boolean
+  filterDropdownOpen: boolean
+  showFilterOptions: boolean,
+  filterTypes: ['Default', 'Date', 'Search', 'Score'],
+  selectedFilter: string
 }
 
 class Home extends React.Component<HomeProps, HomeState>
@@ -65,10 +65,7 @@ class Home extends React.Component<HomeProps, HomeState>
     super(props);
 
     this.toggleDropdown = this.toggleDropdown.bind(this);
-    this.onMouseEnter = this.onMouseEnter.bind(this);
-    this.onMouseLeave = this.onMouseLeave.bind(this);
-
-
+    this.toggleFilterDropdown = this.toggleFilterDropdown.bind(this);
   }
 
   public readonly state: Readonly<HomeState> = {
@@ -78,19 +75,18 @@ class Home extends React.Component<HomeProps, HomeState>
     activeFilters: new Array<ColumnData>(),
     inactiveFilters: new Array<ColumnData>(),
     dropdownOpen: false,
-    showFilterOptions: false
+    filterDropdownOpen: false,
+    showFilterOptions: false,
+    filterTypes: ['Default', 'Date', 'Search', 'Score'],
+    selectedFilter: 'Default'
   }
 
   toggleDropdown() {
     this.setState(prevState => ({ dropdownOpen: !prevState.dropdownOpen }));
   }
 
-  onMouseEnter() {
-    this.setState({ showFilterOptions: true });
-  }
-
-  onMouseLeave() {
-    this.setState({ showFilterOptions: false });
+  toggleFilterDropdown() {
+    this.setState(prevState => ({ filterDropdownOpen: !prevState.filterDropdownOpen }));
   }
 
   componentDidMount() {
@@ -126,52 +122,18 @@ class Home extends React.Component<HomeProps, HomeState>
     this.setState({ activeFilters: newFilters, inactiveFilters: inactive })
   }
 
+  changeFilterType = (newFilterType: string) => {
+    this.setState({ selectedFilter: newFilterType })
+  }
+
   render() {
-    const { error, loading, activeFilters, inactiveFilters } = this.state;
-    const aaaaa = this.state.flightData as unknown as FlightData;
+    const { error, loading, activeFilters, inactiveFilters, filterTypes, selectedFilter } = this.state;
+    const flightData = this.state.flightData as unknown as FlightData;
     if (!loading) {
-      aaaaa.data.columns.forEach(element => {
+      flightData.data.columns.forEach(element => {
         element.id = createUniqieId()
       });
     }
-
-    const tuple = <T extends Array<unknown>>(...args: T): T => args;
-
-    // `Object.keys` does not return the keys as string literals, only strings. Use this helper as a
-    // workaround. https://github.com/Microsoft/TypeScript/pull/12253#issuecomment-263132208
-    const keys = <O extends object>(obj: O) => Object.keys(obj) as Array<keyof O>;
-
-    // `Object.entries` is ES2017, so we must define our own version.
-    const entries = <K extends string, V>(obj: Record<K, V>) =>
-      keys(obj).map(key => tuple(key, obj[key]));
-    const fromEntries = <K extends string, V>(arr: Array<[K, V]>) =>
-      // `Object.assign` is poorly typed: it returns `any` when spreading. Use cast to workaround.
-      Object.assign({}, ...arr.map(([k, v]) => ({ [k]: v }))) as Record<K, V>;
-
-    // Inspired by https://stackoverflow.com/a/37616104/5932012
-    const filter = <K extends string, V, Result extends V>(
-      obj: Record<K, V>,
-      predicate: (key: K, value: V) => value is Result,
-    ) =>
-      fromEntries(
-        entries(obj).filter(
-          (entry): entry is [K, Result] => {
-            const [key, value] = entry;
-            return predicate(key, value);
-          },
-        ),
-      );
-    
-    if (!loading) {
-      var lookingFor = 'Southwest Airlines';
-      var a = aaaaa.data.columns[0].sample;
-      var c = (a.map(b => b == lookingFor))
-      if (c) {
-        console.log('hrllo world, we found', lookingFor)
-      }
-    }
-
-
 
     return (
       <Fragment>
@@ -190,16 +152,26 @@ class Home extends React.Component<HomeProps, HomeState>
           {activeFilters.map(element =>
             <Row key={element.id}>
               <Col>{element.sampleHeader}</Col>
-              <Col>{element.colType}</Col>
+              <Col>
+                <UncontrolledButtonDropdown
+                className="d-inline-block"
+                > Filter Type: 
+                  <DropdownToggle caret> {selectedFilter}</DropdownToggle>
+                <DropdownMenu>
+                  {
+                    filterTypes.map(filter =>
+                      <DropdownItem key={filter} onClick={() => this.changeFilterType(filter)}>{filter}</DropdownItem>
+                    )
+                  }
+                </DropdownMenu>
+                </UncontrolledButtonDropdown></Col>
               <Col>
                 <Button onClick={() => this.removeFilter(element.id)}>
                   Delete</Button></Col>
             </Row>
           )}
 
-          <AddFilter columns={inactiveFilters} loading={loading}></AddFilter>
-l
-          {/* <Dropdown
+          <Dropdown
             className="d-inline-block"
             isOpen={this.state.dropdownOpen}
             toggle={this.toggleDropdown}
@@ -212,7 +184,7 @@ l
                 )
               }
           </DropdownMenu>
-        </Dropdown> */}
+        </Dropdown>
           </Container>
         }
 
