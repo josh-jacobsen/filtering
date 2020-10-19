@@ -2,7 +2,7 @@
 
 ## Requirements and Delivery
 
-| Requirement | Complete | Comments |
+| Requirement | Completed? | Comments |
 | --------------- | --------------- | --------------- |
 | Clicking on `Add filter` should show the list of columns in a dataset | Complete | |
 | Hovering on one of the columns should show the sample data for that particular column | Incomplete | I ran into limitations of not being able to make nested dropdowns with Reactstrap. I began implemeting a solution to this (in the AddFilter.tsx component) howver ran out of time to complete it so stuck with Reactstrap so as to be able to delivery a product |
