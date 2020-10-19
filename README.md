@@ -1,6 +1,6 @@
 # Thematic Frontend Task
 
-![alt text](https://github.com/josh-jacobsen/filtering/load-data/add_filters.png)
+![](https://github.com/josh-jacobsen/filtering/blob/josh/load-data/add_filters.png)
 
 
 This project is based off the Auth0 project created for a new project. Details on Auth0 are at the end of this file.
