@@ -19,7 +19,7 @@
 | Functionality | Comments |
 | --------------- | --------------- |
 | Testing | No tests have been implemented for the new components/functionality. Would aim to add tests using Jest/React Testing Library | 
-
+| Error handling | No additional error handling was implemented. Would aim to gracefully handle network failures and backend outages |
 
 
 ## Thematic Frontend Task
