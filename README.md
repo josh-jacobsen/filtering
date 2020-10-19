@@ -1,6 +1,6 @@
-# Thematic Frontend Task
 
-### Requirements 
+
+## Requirements and Delivery
 
 | Requirement | Complete | Comments |
 | --------------- | --------------- | --------------- |
@@ -16,14 +16,7 @@
 
 
 
-
-
-
-
-
-
-
-![](https://github.com/josh-jacobsen/filtering/blob/josh/load-data/add_filters.png)
+## Thematic Frontend Task
 
 
 This project is based off the Auth0 project created for a new project. Details on Auth0 are at the end of this file.
